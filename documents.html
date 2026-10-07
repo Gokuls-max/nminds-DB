@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Downloads</title>
+<style>
+  :root{
+    --blue:#1f5eff; --blue-dark:#1445c4; --blue-soft:#eaf1ff; --blue-line:#cfdcff;
+    --ink:#10224a; --muted:#5d6f94; --bg:#f6f9ff; --white:#fff;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  header{background:var(--blue);color:#fff;padding:48px 20px 72px}
+  .wrap{max-width:1100px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+  .actions{display:flex;align-items:center;gap:12px}
+  .user{display:flex;align-items:center;gap:10px;color:#fff}
+  .avatar{width:38px;height:38px;border-radius:50%;background:#fff;color:var(--blue);display:flex;align-items:center;justify-content:center;border:2px solid #b9cdff}
+  .avatar svg{width:22px;height:22px}
+  .uname{font-weight:600;font-size:.95rem}
+  @media (max-width:560px){.uname{display:none}}
+  .logout{background:#fff;color:var(--blue);border:0;border-radius:10px;padding:9px 16px;font-size:.95rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .logout:hover{background:var(--blue-soft)}
+  .logout svg{width:18px;height:18px}
+  header h1{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;letter-spacing:-.01em}
+  header p{margin-top:6px;color:#d8e4ff;max-width:52ch}
+  .tools{max-width:1100px;margin:-32px auto 0;padding:0 20px}
+  .bar{background:var(--white);border:1px solid var(--blue-line);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(31,94,255,.12)}
+  .bar input{flex:1 1 220px;border:1px solid var(--blue-line);border-radius:10px;padding:11px 14px;font-size:1rem;color:var(--ink)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--blue-line);background:var(--white);color:var(--blue);padding:8px 14px;border-radius:999px;font-size:.9rem;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue)}
+  :focus-visible{outline:3px solid #8fb0ff;outline-offset:2px}
+  main{max-width:1100px;margin:28px auto 60px;padding:0 20px}
+  .count{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+  .card{background:var(--white);border:1px solid var(--blue-line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s}
+  .card:hover{border-color:var(--blue)}
+  .thumb{background:var(--blue-soft);height:170px;display:flex;align-items:center;justify-content:center;position:relative}
+  .page{width:96px;height:128px;background:#fff;border-radius:6px;box-shadow:0 6px 14px rgba(31,94,255,.18);padding:14px 10px;position:relative}
+  .page i{display:block;height:5px;border-radius:3px;background:var(--blue-line);margin-bottom:7px}
+  .page i:nth-child(1){width:60%;background:var(--blue)}
+  .page i:nth-child(4){width:80%}
+  .page i:nth-child(6){width:50%}
+  .tag{position:absolute;top:10px;right:10px;background:var(--blue);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:6px}
+  .body{padding:16px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .body h3{font-size:1.02rem}
+  .meta{color:var(--muted);font-size:.85rem}
+  .btn{margin-top:auto;display:block;text-align:center;text-decoration:none;background:var(--blue);color:#fff;padding:10px;border-radius:10px;font-weight:600}
+  .btn:hover{background:var(--blue-dark)}
+  .body .btn{margin-top:12px}
+  .empty{display:none;text-align:center;padding:50px 0;color:var(--muted)}
+  @media (prefers-color-scheme:dark){:root{color-scheme:light}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Document downloads</h1>
+        <p>Find the file you need, check the preview, and download it in one click.</p>
+      </div>
+      <div class="actions">
+      <div class="user">
+        <span class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span>
+      
+      </div>
+      <button class="logout" id="logout" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Log out
+      </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="tools">
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search documents" aria-label="Search documents">
+    <div class="chips" id="chips">
+      <button class="chip" aria-pressed="true" data-t="all">All</button>
+      <button class="chip" aria-pressed="false" data-t="PDF">PDF</button>
+      <button class="chip" aria-pressed="false" data-t="DOCX">Word</button>
+      <button class="chip" aria-pressed="false" data-t="XLSX">Excel</button>
+      <button class="chip" aria-pressed="false" data-t="PPTX">Slides</button>
+    </div>
+  </div>
+</section>
+
+<main>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No documents match your search. Try a different word or choose All.</p>
+</main>
+
+<script>
+  // Edit this list: set "file" to your real file path or URL.
+  const docs = [
+    {name:"Annual Report 2025",type:"PDF",size:"4.2 MB",file:"files/annual-report.pdf"},
+    {name:"Project Proposal",type:"DOCX",size:"820 KB",file:"files/proposal.docx"},
+    {name:"Budget Sheet",type:"XLSX",size:"310 KB",file:"files/budget.xlsx"},
+    {name:"Company Presentation",type:"PPTX",size:"6.8 MB",file:"files/company.pptx"},
+    {name:"User Guide",type:"PDF",size:"2.1 MB",file:"files/user-guide.pdf"},
+    {name:"Meeting Notes",type:"DOCX",size:"95 KB",file:"files/meeting-notes.docx"},
+    {name:"Sales Tracker",type:"XLSX",size:"540 KB",file:"files/sales.xlsx"},
+    {name:"Training Slides",type:"PPTX",size:"3.4 MB",file:"files/training.pptx"}
+  ];
+  let type="all";
+  const grid=document.getElementById("grid"),q=document.getElementById("q"),
+        count=document.getElementById("count"),empty=document.getElementById("empty");
+
+  function render(){
+    const term=q.value.trim().toLowerCase();
+    const list=docs.filter(d=>(type==="all"||d.type===type)&&d.name.toLowerCase().includes(term));
+    grid.innerHTML=list.map(d=>`
+      <article class="card">
+        <div class="thumb">
+          <div class="page"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <span class="tag">${d.type}</span>
+        </div>
+        <div class="body">
+          <h3>${d.name}</h3>
+          <span class="meta">${d.type} file, ${d.size}</span>
+          <a class="btn" href="${d.file}" download>Download</a>
+        </div>
+      </article>`).join("");
+    count.textContent=list.length+" document"+(list.length===1?"":"s");
+    empty.style.display=list.length?"none":"block";
+  }
+  q.addEventListener("input",render);
+  document.getElementById("chips").addEventListener("click",e=>{
+    const b=e.target.closest(".chip"); if(!b) return;
+    type=b.dataset.t;
+    document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===b));
+    render();
+  });
+  render();
+
+  // Log out: clear session data and go to your login page (change the URL).
+  document.getElementById("logout").addEventListener("click",()=>{
+    try{sessionStorage.clear();localStorage.removeItem("token");}catch(e){}
+    window.location.href="index.html";
+  });
+</script>
+</body>
+</html>
